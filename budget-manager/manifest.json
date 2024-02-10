@@ -1,8 +1,11 @@
 {
     "manifest_version": 3,
-    "name": "CRXJS Vue Vite Example",
+    "name": "Budget Manager",
     "version": "1.0.0",
     "action": {
         "default_popup": "index.html"
-    }
+    },
+    "permissions": [
+        "storage"
+    ]
 }
