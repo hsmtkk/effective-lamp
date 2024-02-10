@@ -6,3 +6,9 @@
 <script setup lang="ts">
 const name = defineModel()
 </script>
+
+<style scoped>
+p {
+    color: orange;
+}
+</style>
