@@ -3,8 +3,9 @@
     "name": "Budget Manager using CRXJS React",
     "version": "1.0.0",
     "action": {
-        "default_popup": "index.html"
+        "default_popup": "popup.html"
     },
+    "options_page": "options.html",
     "permissions": [
         "storage"
     ]

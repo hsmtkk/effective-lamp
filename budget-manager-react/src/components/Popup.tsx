@@ -1,16 +1,25 @@
 import { useState } from "react"
 
-export default function BudgetManager() {
+interface Budget {
+    total: string
+}
+
+export default function Popup() {
     const [total, setTotal] = useState(0)
     const [limit, setLimit] = useState(0)
     const [amount, setAmount] = useState(0)
 
+    chrome.storage.local.get(["total"]).then((budget: Budget) => {
+        console.log("chrome.storage.local.get")
+        setTotal(parseInt(budget.total))
+    })
+
     const spendClicked = () => {
         console.log("spend clicked")
-        chrome.storage.local.get(["total"]).then((result: { total: string }) => {
+        chrome.storage.local.get(["total"]).then((budget: Budget) => {
             let newTotal = 0
-            if (result.total) {
-                newTotal += parseInt(result.total)
+            if (budget.total) {
+                newTotal += parseInt(budget.total)
             }
             newTotal += Number(amount)
             chrome.storage.local.set({ total: newTotal }).then(() => {
