@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom"
-import Popup from "./components/Popup"
+import Index from "./components/Index"
 import Options from "./components/Options"
 
 export default function App() {
     return (
         <Routes>
-            <Route path="/popup.html" element={<Popup />} />
+            <Route path="/index.html" element={<Index />} />
             <Route path="/options.html" element={<Options />} />
         </Routes >
     )

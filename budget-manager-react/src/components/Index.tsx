@@ -1,43 +1,44 @@
 import { useState } from "react"
 
-interface Budget {
-    total: string
-}
-
-export default function Popup() {
+export default function Index() {
     const [total, setTotal] = useState(0)
     const [limit, setLimit] = useState(0)
     const [amount, setAmount] = useState(0)
 
-    chrome.storage.local.get(["total"]).then((budget: Budget) => {
+    chrome.storage.local.get(["total"]).then((result) => {
         console.log("chrome.storage.local.get")
-        setTotal(parseInt(budget.total))
+        setTotal(parseInt(result.total))
     })
+
+    chrome.storage.local.get(["limit"]).then((result) => {
+        console.log("chrome.storage.local.get")
+        setLimit(parseInt(result.limit))
+    })
+
 
     const spendClicked = () => {
         console.log("spend clicked")
-        chrome.storage.local.get(["total"]).then((budget: Budget) => {
+        chrome.storage.local.get(["total"]).then((result) => {
             let newTotal = 0
-            if (budget.total) {
-                newTotal += parseInt(budget.total)
+            if (result.total) {
+                newTotal += parseInt(result.total)
             }
             newTotal += Number(amount)
             chrome.storage.local.set({ total: newTotal }).then(() => {
                 console.log("chrome.storage.local.set")
                 console.log(`{total: ${newTotal}}`)
+
+                const notifyOptions = {
+                    type: ("basic" as chrome.notifications.TemplateType),
+                    title: "Limit reached",
+                    message: "Uh oh! Looks like you've reached your limit!",
+                    iconUrl: "icon48.png",
+                }
+                chrome.notifications.create(notifyOptions)
+
                 setTotal(newTotal)
                 setAmount(0)
             })
-        })
-    }
-
-    const resetClicked = () => {
-        console.log("reset clicked")
-        chrome.storage.local.set({ total: 0 }).then(() => {
-            console.log("chrome.storage.local.set")
-            console.log("{total: 0}")
-            setTotal(0)
-            setAmount(0)
         })
     }
 
@@ -51,7 +52,6 @@ export default function Popup() {
             </label>
             <div>
                 <button onClick={spendClicked}>Spend</button>
-                <button onClick={resetClicked}>Reset</button>
             </div>
         </>
     )
