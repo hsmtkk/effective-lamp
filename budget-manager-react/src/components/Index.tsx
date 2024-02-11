@@ -5,41 +5,36 @@ export default function Index() {
     const [limit, setLimit] = useState(0)
     const [amount, setAmount] = useState(0)
 
-    chrome.storage.local.get(["total"]).then((result) => {
-        console.log("chrome.storage.local.get")
+    chrome.storage.local.get(["total", "limit"]).then((result) => {
+        console.log("[index] get total & limit from local storage")
         setTotal(parseInt(result.total))
-    })
-
-    chrome.storage.local.get(["limit"]).then((result) => {
-        console.log("chrome.storage.local.get")
         setLimit(parseInt(result.limit))
     })
 
-
     const spendClicked = () => {
         console.log("spend clicked")
-        chrome.storage.local.get(["total"]).then((result) => {
-            let newTotal = 0
-            if (result.total) {
-                newTotal += parseInt(result.total)
-            }
-            newTotal += Number(amount)
-            chrome.storage.local.set({ total: newTotal }).then(() => {
-                console.log("chrome.storage.local.set")
-                console.log(`{total: ${newTotal}}`)
-
-                const notifyOptions = {
-                    type: ("basic" as chrome.notifications.TemplateType),
-                    title: "Limit reached",
-                    message: "Uh oh! Looks like you've reached your limit!",
-                    iconUrl: "icon48.png",
-                }
-                chrome.notifications.create(notifyOptions)
-
-                setTotal(newTotal)
-                setAmount(0)
-            })
+        let newTotal = 0
+        if (total) {
+            newTotal += Number(total)
+        }
+        newTotal += Number(amount)
+        chrome.storage.local.set({ total: newTotal }).then(() => {
+            console.log("[index] set total in local storage")
+            console.log(`{total: ${newTotal}}`)
         })
+
+        if (newTotal >= limit) {
+            const notifyOptions = {
+                type: ("basic" as chrome.notifications.TemplateType),
+                title: "Limit reached",
+                message: "Uh oh! Looks like you've reached your limit!",
+                iconUrl: "icon48.png",
+            }
+            chrome.notifications.create(notifyOptions)
+        }
+
+        setTotal(newTotal)
+        setAmount(0)
     }
 
     return (

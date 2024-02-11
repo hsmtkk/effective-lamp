@@ -6,7 +6,7 @@ export default function Options() {
     const saveLimitClicked = () => {
         console.log("save limit clicked")
         chrome.storage.local.set({ limit: limit }).then(() => {
-            console.log("chrome.storage.local.set")
+            console.log("[option] set limit in local storage")
             console.log(`{limit: ${limit}}`)
         })
     }
@@ -14,7 +14,7 @@ export default function Options() {
     const resetTotalClicked = () => {
         console.log("reset total clicked")
         chrome.storage.local.set({ total: 0 }).then(() => {
-            console.log("chrome.storage.local.set")
+            console.log("[option] reset limit as 0 in local storage")
             console.log("{total: 0}")
         })
     }
